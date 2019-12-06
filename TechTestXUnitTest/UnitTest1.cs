@@ -10,6 +10,7 @@ namespace TechTestXUnitTest
         [InlineData("IRELAND", "1", "1")]
         [InlineData("IRELAND", "1", "2")]
         [InlineData("germany", "10", "20")]
+        [InlineData("irelandD", "1", "20")]
         public void ShouldProcessBeValidTest(string employeelocation, string srthoursworked, string srthourlyrate)
         {
             // arrange
@@ -24,5 +25,6 @@ namespace TechTestXUnitTest
             // assert
             result.Should().NotBeNullOrWhiteSpace();
         }
+
     }
 }
