@@ -30,15 +30,16 @@ namespace TechTest
         public string StrHoursRate { get; set; }
         public string EmployeesLocation { get; set; }
     }
-
     public class ConsoleContext
     {
+        Deductions Deductions { get; set; }
         UserInput UserInput { get; set; }
         StringBuilder Builder { get; set; }
 
         public ConsoleContext()
         {
             Builder = new StringBuilder();
+            Deductions = new Deductions();
         }
         public void Init(UserInput userInput )
         {
@@ -54,35 +55,48 @@ namespace TechTest
             Console.WriteLine("Please enter the employee’s location: ");
             UserInput.EmployeesLocation= Console.ReadLine();
         }
+        public bool Interpret()
+        {
+            string location = UserInput.EmployeesLocation;
+            bool isvalidLocation = Enum.IsDefined(typeof(Countries), location.ToLower());
+            int.TryParse(UserInput.StrHoursRate, out int hoursRate);
+            int.TryParse(UserInput.StrHoursWorked, out int hoursWorked);
+
+            Deductions.GrossAmount = hoursWorked * hoursRate;
+
+            return (hoursRate != 0 && hoursWorked != 0 && isvalidLocation);
+        }
+
+        public enum Countries
+        {
+            ireland,
+            italy,
+            germany
+        }
+
+
         public void Process()
         {
-            int.TryParse(UserInput.StrHoursWorked, out int hoursworked);
-            int.TryParse(UserInput.StrHoursRate, out int hoursRate);
 
-            if (UserInput.EmployeesLocation.ToString().ToLower() == "ireland")
+           var valid =  Interpret();
+
+            if (valid)
             {
-                var d = new Deductions()
-                {
-                    Employeelocation = UserInput.StrHoursWorked,
-                    GrossAmount = hoursworked * hoursRate,
-                    IncomeTax = 0,
-                    UniversalSocialCharge = 0,
-                    Pension = 0,
-                    NetAmount = 0
-                };
-
-                Builder.AppendFormat("Employee location: {0}{1}", d.Employeelocation, Environment.NewLine);
-                Builder.AppendFormat("Gross Amount: {0:C}{1}", d.GrossAmount, Environment.NewLine);
+               
+                Builder.AppendFormat("Employee location: {0}{1}", Deductions.Employeelocation, Environment.NewLine);
+                Builder.AppendFormat("Gross Amount: {0:C}{1}", Deductions.GrossAmount, Environment.NewLine);
                 Builder.AppendLine("Less deductions");
-                Builder.AppendFormat("Income Tax: {0:C}{1}", d.IncomeTax, Environment.NewLine);
-                Builder.AppendFormat("Universal Social Charge: {0:C}{1}", d.UniversalSocialCharge, Environment.NewLine);
-                Builder.AppendFormat("Pension: {0:C}{1}", d.Pension, Environment.NewLine);
-                Builder.AppendFormat("Net Amount: {0:C}{1}", d.NetAmount, Environment.NewLine);
+                Builder.AppendFormat("Income Tax: {0:C}{1}", Deductions.IncomeTax, Environment.NewLine);
+                Builder.AppendFormat("Universal Social Charge: {0:C}{1}", Deductions.UniversalSocialCharge, Environment.NewLine);
+                Builder.AppendFormat("Pension: {0:C}{1}", Deductions.Pension, Environment.NewLine);
+                Builder.AppendFormat("Net Amount: {0:C}{1}", Deductions.NetAmount, Environment.NewLine);
             }
             else
             {
-                WriteText("not implemented");
+                WriteText("Please insert valid values");
             }
+
+         
         }
         public string OutPutResult()
         {
@@ -90,7 +104,6 @@ namespace TechTest
             Console.WriteLine(result);
             return result;
         }
-
         private string WriteText(string text)
         {
             Builder.Append(text);
