@@ -1,5 +1,6 @@
 using System;
 using Xunit;
+using TechTest;
 
 namespace TechTestXUnitTest
 {
@@ -8,7 +9,8 @@ namespace TechTestXUnitTest
         [Fact]
         public void Test1()
         {
-
+            var consoleContext = new ConsoleContext();
+            consoleContext.Test();
         }
     }
 }
