@@ -8,34 +8,58 @@ namespace TechTest
         static void Main(string[] args)
         {
             var consoleContext = new ConsoleContext();
-            consoleContext.Test();
+            consoleContext.Init();
+            consoleContext.Process();
         }
     }
 
-   public class ConsoleContext
+    public class UserInput
     {
-       public void Test()
+        public UserInput(string strHoursWorked, string strHoursRate, string employeesLocation)
         {
-            string srthoursworked;
-            string srthourlyrate;
-            string employeelocation;
+            StrHoursWorked = strHoursWorked;
+            StrHoursRate = strHoursRate;
+            EmployeesLocation = employeesLocation;
+        }
+        public UserInput()
+        {
 
+        }
+
+        public string StrHoursWorked { get; set; }
+        public string StrHoursRate { get; set; }
+        public string EmployeesLocation { get; set; }
+    }
+
+    public class ConsoleContext
+    {
+        UserInput UserInput { get; set; }
+        StringBuilder Builder { get; set; }
+        public void Init(UserInput userInput )
+        {
+            UserInput = userInput;
+        }
+        public void Init()
+        {
+            UserInput = new UserInput();
             Console.WriteLine("Please enter the hours worked:");
-            srthoursworked = Console.ReadLine();
+            UserInput.StrHoursWorked = Console.ReadLine();
             Console.WriteLine("Please enter the hourly rate: ");
-            srthourlyrate = Console.ReadLine();
+            UserInput.StrHoursRate = Console.ReadLine();
             Console.WriteLine("Please enter the employee’s location: ");
-            employeelocation = Console.ReadLine();
+            UserInput.EmployeesLocation= Console.ReadLine();
+        }
+        public void Process()
+        {
 
+            int.TryParse(UserInput.StrHoursWorked, out int hoursworked);
+            int.TryParse(UserInput.StrHoursRate, out int hoursRate);
 
-            int.TryParse(srthoursworked, out int hoursworked);
-            int.TryParse(srthourlyrate, out int hoursRate);
-
-            if (employeelocation.ToString() == "ireland")
+            if (UserInput.EmployeesLocation.ToString() == "ireland")
             {
                 var d = new Deductions()
                 {
-                    Employeelocation = employeelocation,
+                    Employeelocation = UserInput.StrHoursWorked,
                     GrossAmount = hoursworked * hoursRate,
                     IncomeTax = 0,
                     UniversalSocialCharge = 0,
@@ -52,9 +76,7 @@ namespace TechTest
                 b.AppendFormat("Universal Social Charge: {0:C}{1}", d.UniversalSocialCharge, Environment.NewLine);
                 b.AppendFormat("Pension: {0:C}{1}", d.Pension, Environment.NewLine);
                 b.AppendFormat("Net Amount: {0:C}{1}", d.NetAmount, Environment.NewLine);
-
-
-                Console.WriteLine(b.ToString());
+                Builder = b;
 
             }
             else
@@ -63,6 +85,16 @@ namespace TechTest
                 Console.WriteLine("not implemented");
             }
         }
+
+        public string OutPutResult()
+        {
+            string result = Builder.ToString();
+            Console.WriteLine(result);
+            return result;
+        }
+
+
+        
     }
     class Deductions
     {
