@@ -1,6 +1,6 @@
 ﻿namespace Application
 {
-    public class UserInterpreted
+    public class UserInterpreted 
     {
         public bool isValid { get; }
         public int HoursWorked { get; }

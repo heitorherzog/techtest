@@ -2,7 +2,6 @@
 using TechTest;
 using FluentAssertions;
 using Application;
-using Moq;
 
 namespace TechTestXUnitTest
 {
@@ -31,7 +30,6 @@ namespace TechTestXUnitTest
             // assert
             result.Should().NotBeNull();
             result.isValid.Should().BeTrue();
-
         }
 
         [Theory]
@@ -56,57 +54,6 @@ namespace TechTestXUnitTest
             // assert
             result.Should().NotBeNull();
             result.isValid.Should().BeFalse();
-        }
-
-
-        [Theory]
-        [InlineData("IRELAND", "1", "1")]
-        [InlineData("ireland", "1", "2")]
-        [InlineData("germany", "10", "20")]
-        public void Should_Process_Has_ValidData(string employeelocation, string srthoursworked, string srthourlyrate)
-        {
-            // arrange
-            var app = new ApplicationContext();
-            string result;
-
-            var input = new UserInput()
-            {
-                EmployeesLocation = employeelocation,
-                StrHoursRate = srthourlyrate,
-                StrHoursWorked = srthoursworked
-            };
-
-            // act
-            app.Process(input);
-            result = app.ResultBuilder.ToString();
-
-            // assert
-            result.Should().Contain("Employee");
-        }
-
-        [Theory]
-        [InlineData("LAND", "1", "1")]
-        [InlineData("ireland", "x", "2")]
-        [InlineData("germany", "10", "20..")]
-        public void Should_Process_Has_InValidData(string employeelocation, string srthoursworked, string srthourlyrate)
-        {
-            // arrange
-            var app = new ApplicationContext();
-            string result;
-
-            var input = new UserInput()
-            {
-                EmployeesLocation = employeelocation,
-                StrHoursRate = srthourlyrate,
-                StrHoursWorked = srthoursworked
-            };
-
-            // act
-            app.Process(input);
-            result = app.ResultBuilder.ToString();
-
-            // assert
-            result.Should().Contain("Please");
         }
     }
 }

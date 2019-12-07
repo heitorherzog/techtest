@@ -7,7 +7,9 @@ namespace Application
     {
         public StringBuilder ResultBuilder { get; set; }
         public Deductions Deductions { get => _deductions; }
-        private Deductions _deductions;
+        private Deductions _deductions { get; set; }
+        public bool InvalidInput { get => _invalidInput; }
+        private bool _invalidInput { get; set; }
 
         public HandleOutputDeductions()
         {
@@ -22,6 +24,7 @@ namespace Application
         {
             if (_deductions == null)
             {
+                _invalidInput = true;
                 ResultBuilder.Append("Please insert valid values");
                 return;
             }
