@@ -23,7 +23,7 @@ namespace Application
 
             return new UserInterpreted(isValid, hoursWorked, hoursRate);
         }
-        public void Process(IUserInput userInput)
+        public  void Process(IUserInput userInput)
         {
             var UserInterpret = Interpret(userInput);
 
